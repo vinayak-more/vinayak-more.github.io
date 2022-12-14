@@ -1,6 +1,6 @@
 let origBoard;
-let huPlayer = 'O'
-let aiPlayer = 'X'
+let huPlayer = 'X'
+let aiPlayer = 'O'
 const winCombos = [
     [0, 1, 2],
     [3, 4, 5],
