@@ -1,6 +1,8 @@
 let origBoard;
 let huPlayer = 'X'
 let aiPlayer = 'O'
+//EASY = 80% Random, Medium = 50% random, Hard = 20% Random
+let difficultyLevel = 8; // default is easy
 const INFINITY = 20;
 const winCombos = [
     [0, 1, 2],
@@ -34,10 +36,15 @@ function turnClick(square) {
 }
 
 function turn(squareId, player) {
+    if(squareId == -1) return;
     origBoard[squareId] = player;
     document.getElementById(squareId).innerText = player;
     let gameResult = checkWinner(origBoard, player);
     if (gameResult) gameOver(gameResult);
+}
+
+function updateDLevel(level){
+    difficultyLevel = level;
 }
 
 function checkWinner(board, player) {
@@ -93,12 +100,22 @@ function declareWinner(player) {
     document.getElementById("endText").innerHTML = player;
 }
 
+function randonSquare(board){
+    return emptySquares(board)[0];
+}
 
-function bestSquare(origBoard) {
+function bestSquare(board) {
     callCounter = 0;
-    const index = minimax(origBoard, aiPlayer, -INFINITY, +INFINITY).index;
-    console.log(callCounter);
-    return index;
+    const bestMove = minimax(board, aiPlayer, -INFINITY, +INFINITY).index;
+
+    const randomMove = randonSquare(board);
+    //difficulty level
+    let choises  = Array.from(Array(10).keys());
+    for(let i = 0 ; i < 10; i++){
+        choises[i] = i < difficultyLevel ? randomMove : bestMove;
+    }
+    const choise = Math.floor(Math.random() * 10);
+    return choises[choise];
 }
 let callCounter = 0;
 function minimax(board, player, alpha, beta) {

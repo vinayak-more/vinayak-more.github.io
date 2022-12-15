@@ -61,3 +61,13 @@ table tr td:last-child {
     margin-top: 10%;
     margin-bottom: 10%;
 }
+
+.level{
+    display: flex;
+    margin-bottom: 15%;
+    margin-top: 15%;
+}
+
+.level div{
+    margin-left: 1rem;
+}

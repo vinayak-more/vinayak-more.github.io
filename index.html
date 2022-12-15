@@ -13,7 +13,22 @@
 <body>
 
     <div class="dflex">
-        <button class="replay" onclick="startGame()">Replay</button>
+        
+
+        <div class="level">
+            <div>
+                <input type="radio" id="easy" name="level" onclick="updateDLevel(8)" checked><label id="easy-lbl" for="easy">Easy</label>
+            </div>
+            <div>
+                <input type="radio" id="diff" name="level" onclick="updateDLevel(5)"><label id="diff-lbl" for="diff">Difficult</label>
+            </div>
+            <div>
+                <input type="radio" id="hard" name="level" onclick="updateDLevel(2)"><label id="hard-lbl" for="hard">Hard</label>
+            </div>
+            <div>
+                <input type="radio" id="unbeatable" name="level" onclick="updateDLevel(0)"><label id="unb-lbl" for="unbeatable">Unbeatable</label>
+            </div>
+        </div>
 
 
         <table>
@@ -37,6 +52,7 @@
 
     <div id="endGame">
         <div id="endText"></div>
+        <button class="replay" onclick="startGame()">Replay</button>
     </div>
 
     <script src="script.js"></script>
