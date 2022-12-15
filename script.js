@@ -1,6 +1,7 @@
 let origBoard;
 let huPlayer = 'X'
 let aiPlayer = 'O'
+const INFINITY = 20;
 const winCombos = [
     [0, 1, 2],
     [3, 4, 5],
@@ -75,9 +76,6 @@ function emptySquares(board) {
     return board.filter(element => typeof element === 'number');
 }
 
-function bestSquare(origBoard) {
-    return minimax(origBoard,aiPlayer).index;
-}
 
 function checkTie(board) {
     if (emptySquares(board).length === 0) {
@@ -95,7 +93,16 @@ function declareWinner(player) {
     document.getElementById("endText").innerHTML = player;
 }
 
-function minimax(board, player) {
+
+function bestSquare(origBoard) {
+    callCounter = 0;
+    const index = minimax(origBoard, aiPlayer, -INFINITY, +INFINITY).index;
+    console.log(callCounter);
+    return index;
+}
+let callCounter = 0;
+function minimax(board, player, alpha, beta) {
+    callCounter++;
     let availSquares = emptySquares(board);
 
     if (checkWinner(board, huPlayer)) {
@@ -106,43 +113,44 @@ function minimax(board, player) {
         return { score: 0, index: -1 };
     }
 
-    let moves = [];
-
-    for (let square of availSquares) {
-        let move = {};
-        move.index = square;
-        board[square] = player;
-        let tempScore;
-        if (player === huPlayer) {
-            tempScore = minimax(board, aiPlayer);
-        } else {
-            tempScore = minimax(board, huPlayer);
-        }
-        board[square] = square;
-        move.score = tempScore.score;
-        moves.push(move);
-    }
 
     let bestScore = null;
     let bestMove = null;
-
-    if (player === huPlayer) {
+    if (player == huPlayer) {
         //minimize
-        bestScore = 20;
-        for (let move of moves) {
+        bestScore = +INFINITY;
+        for (let square of availSquares) {
+            let move = {};
+            move.index = square;
+            board[square] = player;
+            let tempScore;
+            tempScore = minimax(board, aiPlayer, alpha, beta);
+            board[square] = square;
+            move.score = tempScore.score;
             if (move.score < bestMove) {
                 bestScore = move.score
                 bestMove = move.index;
+                beta = bestMove;
             }
+            if(beta < alpha) break;
         }
     } else {
         //maximize
-        bestScore = -20;
-        for (let move of moves) {
+        bestScore = -INFINITY;
+        for (let square of availSquares) {
+            let move = {};
+            move.index = square;
+            board[square] = player;
+            let tempScore;
+            tempScore = minimax(board, huPlayer, alpha, beta);
+            board[square] = square;
+            move.score = tempScore.score;
             if (move.score > bestScore) {
                 bestScore = move.score;
                 bestMove = move.index;
+                alpha = bestMove;
             }
+            if(alpha > beta) break;
         }
     }
 
